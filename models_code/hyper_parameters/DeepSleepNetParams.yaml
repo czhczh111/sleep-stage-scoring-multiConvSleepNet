@@ -1,0 +1,10 @@
+#preprocess
+sequence_length: 25
+
+#train
+epochs: 100
+batch_size: 4
+class_weights: [1.0, 1.0, 1.0, 1.0, 1.0]
+patience: 40
+optimizer: "adam"
+sleep_epoch_length: 3000
