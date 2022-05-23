@@ -25,90 +25,6 @@ from tensorflow.compat.v1 import InteractiveSession
 
 from functools import reduce
 
-def f1_scores_from_cm(cm: np.ndarray) -> np.ndarray:
-    """
-    Using confusion matrix to calculate the f1 score of every class
-
-    :param cm: the confusion matrix
-
-    :return: the f1 score
-    """
-    def get_tp_rel_sel_from_cm(cm: np.ndarray) -> (np.ndarray, np.ndarray, np.ndarray):
-        """
-        calculate the diagonal, column sum and row sum of the matrix
-        """
-        tp = np.diagonal(cm)
-        rel = np.sum(cm, axis=0)
-        sel = np.sum(cm, axis=1)
-        return tp, rel, sel
-
-    def precision_scores_from_cm(cm: np.ndarray) -> np.ndarray:
-        """
-        calculate the precision of matrix
-        """
-        tp, rel, sel = get_tp_rel_sel_from_cm(cm)
-        sel_mask = sel > 0
-        precision_score = np.zeros(shape=tp.shape, dtype=np.float32)
-        precision_score[sel_mask] = tp[sel_mask] / sel[sel_mask]
-        return precision_score
-
-    def recall_scores_from_cm(cm: np.ndarray) -> np.ndarray:
-        """
-        calculate the recall of matrix
-        """
-        tp, rel, sel = get_tp_rel_sel_from_cm(cm)
-        rel_mask = rel > 0
-        recall_score = np.zeros(shape=tp.shape, dtype=np.float32)
-        recall_score[rel_mask] = tp[rel_mask] / rel[rel_mask]
-        return recall_score
-
-    precisions = precision_scores_from_cm(cm)
-    recalls = recall_scores_from_cm(cm)
-
-    # prepare arrays
-    dices = np.zeros_like(precisions)
-
-    # Compute dice
-    intrs = (2 * precisions * recalls)
-    union = (precisions + recalls)
-    dice_mask = union > 0
-    dices[dice_mask] = intrs[dice_mask] / union[dice_mask]
-    return dices
-
-
-
-
-def get_tp_rel_sel_from_cm(cm: np.ndarray) -> (np.ndarray, np.ndarray, np.ndarray):
-    """
-    calculate the diagonal, column sum and row sum of the matrix
-    """
-    tp = np.diagonal(cm)
-    rel = np.sum(cm, axis=0)
-    sel = np.sum(cm, axis=1)
-    return tp, rel, sel
-
-
-def precision_scores_from_cm(cm: np.ndarray) -> np.ndarray:
-    """
-    calculate the precision of matrix
-    """
-    tp, rel, sel = get_tp_rel_sel_from_cm(cm)
-    sel_mask = sel > 0
-    precision_score = np.zeros(shape=tp.shape, dtype=np.float32)
-    precision_score[sel_mask] = tp[sel_mask] / sel[sel_mask]
-    return precision_score
-
-def recall_scores_from_cm(cm: np.ndarray) -> np.ndarray:
-    """
-    calculate the recall of matrix
-    """
-    tp, rel, sel = get_tp_rel_sel_from_cm(cm)
-    rel_mask = rel > 0
-    recall_score = np.zeros(shape=tp.shape, dtype=np.float32)
-    recall_score[rel_mask] = tp[rel_mask] / rel[rel_mask]
-    return recall_score
-
-
 
 
 def parse_args():
@@ -207,11 +123,10 @@ def summary_models(args: argparse.Namespace, hyper_param_dict: dict):
     
     #退出循环
     sum_cm = reduce(lambda x, y: x + y, cm_list)
-    ave_f1 = f1_scores_from_cm(sum_cm)
+
     ave_acc = np.sum(np.diagonal(sum_cm)) / np.sum(sum_cm)
-    print(f"the average accuracy: {ave_acc} and the average f1-score: {ave_f1}")
-    MF1 = np.mean(ave_f1)
-    print("MF1:", MF1)
+
+    print("ave_acc:", ave_acc)
     print("macro_f1_list:", macro_f1_list)
     print("MF1_list:", MF1_list)
     print("acc_list:", acc_list)
@@ -238,14 +153,6 @@ def summary_models(args: argparse.Namespace, hyper_param_dict: dict):
     print("per_class_recall:", per_class_recall)
     print("per_class_f1:", per_class_f1)
     
-    
-    #看看是不是一样
-    precision2 = precision_scores_from_cm(sum_cm)
-    recall2 = recall_scores_from_cm(sum_cm)
-    f1_2 = f1_scores_from_cm(sum_cm)
-    print("precision2:", precision2)
-    print("recall2:", recall2)
-    print("f1_2:", f1_2)
     print("sum_cm:", sum_cm)
     
     
