@@ -8,7 +8,6 @@ from tensorflow.keras.utils import to_categorical
 from sklearn.metrics import confusion_matrix, accuracy_score, f1_score, classification_report
 
 from preprocess import preprocess
-#from load_files import train_npzs, valid_npzs, load_npz_files, all_npzs
 from load_files import load_npz_files, all_npzs
 from loss_function import weighted_categorical_cross_entropy
 
