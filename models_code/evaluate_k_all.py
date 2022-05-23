@@ -127,6 +127,14 @@ def summary_models(args: argparse.Namespace, hyper_param_dict: dict):
     ave_acc = np.sum(np.diagonal(sum_cm)) / np.sum(sum_cm)
 
     print("ave_acc:", ave_acc)
+
+    print("len(pred_list):", len(pred_list))
+    print("len(label_list):", len(label_list))
+    acc = accuracy_score(label_list, pred_list)
+    macro_f1 = f1_score(label_list, pred_list, average = 'macro')
+    print("acc:", acc)
+    print("macro_f1:", macro_f1)
+    
     print("macro_f1_list:", macro_f1_list)
     print("MF1_list:", MF1_list)
     print("acc_list:", acc_list)
@@ -138,8 +146,6 @@ def summary_models(args: argparse.Namespace, hyper_param_dict: dict):
     print("mean_acc:", mean_acc)
 
     
-    print("len(pred_list):", len(pred_list))
-    print("len(label_list):", len(label_list))
     report = classification_report(label_list, 
                                        pred_list, target_names = ['W', 'N1', 'N2', 'N3', 'REM'], output_dict = True)
     
