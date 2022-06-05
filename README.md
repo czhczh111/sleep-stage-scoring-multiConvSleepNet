@@ -1,9 +1,9 @@
 # sleep-stage-scoring-multiConvSleepNet
 
-Demo:
-    demo.py: demo，读取存好的EEG，预测标签并通过蓝牙发送给arduino
-    loss_function: 损失函数
-    load_files: 加载npz
+Demo:\n
+    demo.py: demo，读取存好的EEG，预测标签并通过蓝牙发送给arduino\n
+    loss_function: 损失函数\n
+    load_files: 加载npz\n
     sleep_stage_predict.py: 部分函数定义
     models: 模型定义（TinySleepNet, SalientModel, multiConvSleepNet, DeepSleepNet, baseCNN, LSTM, BiLSTM）
     hyper_parameters: 各模型对应的超参数定义
